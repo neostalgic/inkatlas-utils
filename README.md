@@ -48,7 +48,7 @@ The output may look something like this:
 
 ## Usage
 
-1. First, arrange each icon in a seperate layer in Photoshop and position them exactly how you'd like the texture map to be setup in the game.
+1. First, arrange each texture in a seperate layer in Photoshop and position them exactly how you'd like the texture map to be setup in the game.
 2. Next, give each layer a name - the layer name will be used to generate the `partName` which can then subsequently be accesed in the game via a CNAME. 
 Ex. (In Redscript)
 ```swift
