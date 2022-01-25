@@ -1,0 +1,44 @@
+{
+  "id": "inkatlas-uv-bounds-generator",
+  "name": "Inkatlas UV Bounds Generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "host": [
+    {
+      "app": "PS",
+      "minVersion": "23.0.0"
+    }
+  ],
+  "manifestVersion": 4,
+  "entrypoints": [
+    {
+      "type": "command",
+      "id": "generate-uv-bounds",
+      "label": {
+        "default": "Generate Inkatlas UV Bounds"
+      }
+    }
+  ],
+  "icons": [
+    {
+      "width": 48,
+      "height": 48,
+      "path": "icons/plugin-icon.png",
+      "scale": [
+        1,
+        2
+      ],
+      "theme": [
+        "darkest",
+        "dark",
+        "medium",
+        "lightest",
+        "light",
+        "all"
+      ],
+      "species": [
+        "pluginList"
+      ]
+    }
+  ]
+}

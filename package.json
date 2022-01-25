@@ -1,0 +1,7 @@
+{
+  "name": "inkatlas-uv-bounds-generator",
+  "version": "1.0.0",
+  "description": "Generates UV bounds for inkatlas files",
+  "author": "deadlymustard",
+  "license": "Apache-2.0"
+}
