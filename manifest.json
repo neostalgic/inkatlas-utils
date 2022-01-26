@@ -1,8 +1,8 @@
 {
-  "id": "inkatlas-uv-bounds-generator",
-  "name": "Inkatlas UV Bounds Generator",
+  "id": "inkatlas-utils",
+  "name": "InkAtlas Utils",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.html",
   "host": [
     {
       "app": "PS",
@@ -12,10 +12,26 @@
   "manifestVersion": 4,
   "entrypoints": [
     {
-      "type": "command",
-      "id": "generate-uv-bounds",
+      "type": "panel",
+      "id": "ink-atlas-utils-panel",
+      "minimumSize": {
+        "width": 230,
+        "height": 760
+      },
+      "maximumSize": {
+        "width": 2000,
+        "height": 2000
+      },
+      "preferredDockedSize": {
+        "width": 230,
+        "height": 760
+      },
+      "preferredFloatingSize": {
+        "width": 400,
+        "height": 760
+      },
       "label": {
-        "default": "Generate Inkatlas UV Bounds"
+        "default": "InkAtlas Utils"
       }
     }
   ],

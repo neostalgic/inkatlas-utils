@@ -1,7 +1,7 @@
 {
-  "name": "inkatlas-uv-bounds-generator",
+  "name": "inkatlas-util-ps-plugin",
   "version": "1.0.0",
-  "description": "Generates UV bounds for inkatlas files",
+  "description": "A photoshop plugin that aids in the creation of texture maps for Cyberpunk 2077",
   "author": "deadlymustard",
   "license": "Apache-2.0"
 }

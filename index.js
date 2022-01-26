@@ -1,104 +1,63 @@
-// Photoshop UXP Sample
-// Get the layer names from the active document, and write them to a file.
-// Shows how to access layers, and how to prompt the user for a filepath.
+// Photoshop Dependencies
+const app = require("photoshop").app;
+const core = require("photoshop").core;
 
-  const { entrypoints } = require("uxp");
-// Set up entry points -- this defines the handler for menu items
-// If this plugin had a panel, we would define flyout menu items here
-entrypoints.setup({
-  commands: {
-    'generate-uv-bounds': () => writeAtlasMappings()
-    // if we had other menu items, they would go here and in the manifest.json file.
-  }
-});
+const fit = require("./fit");
+const atlas = require("./atlas");
 
-async function writeAtlasMappings() {
+// Handle fitting layers together
+async function fitLayers(spacing) {
+  fit.fitLayersAndMove(app, core, spacing);
+}
+
+// Generate the atlas file and write
+async function writeAtlasFile(fileName, depotPath, depotPath1080p) {
   try {
-    const app = require("photoshop").app;
     if (app.documents.length == 0) {
       showAlert("Please open at least one document.");
       return;
     }
     const activeDoc = app.activeDocument;
-
-    const atlasMappings = generateAtlasMappings(activeDoc);
-    if (atlasMappings) {
-      await writeAtlasMappingsToDisk(activeDoc.title, atlasMappings);
-    }
-    else {
+    const atlasJson = atlas.generateAtlasJson(activeDoc, depotPath, depotPath1080p);
+    if (atlasJson) {
+      await writeAtlasJsonToDisk(fileName, atlasJson);
+    } else {
       showAlert("Could not get any layer names.");
     }
-  }
-  catch(err) {
+  } catch (err) {
     showAlert(`Error occurred getting layer names: ${err.message}`);
   }
 }
 
-function generateAtlasMappings(activeDoc) {
-    const allLayers = activeDoc.layers;
-    return allLayers.map(layer => generateAtlasMappingForLayer(activeDoc, layer));
-}
-
-function generateAtlasMappingForLayer(activeDoc, layer) {
-
-  const height = activeDoc.height;
-  const width = activeDoc.width;
-
-  return {
-    Type: "inkTextureAtlasMapper",
-    Properties: {
-      clippingRectInPixels: {
-        Type: "Rect",
-        Properties: {
-          bottom: 0,
-          left: 0,
-          right: 0,
-          top: 0
-        }
-      },
-      clippingRectInUVCoords: {
-        Type: "RectF",
-        Properties: {
-          Bottom: layer.bounds.bottom / height,
-          Left: layer.bounds.left / width,
-          Right: layer.bounds.right / width,
-          Top: layer.bounds.top / height
-        }
-      },
-      partName: slugify(layer.name)
-    }
-  }
-}
-
-function slugify(str) {
-  str = str.replace(/^\s+|\s+$/g, ''); // trim
-  str = str.toLowerCase();
-
-  // remove accents, swap ñ for n, etc
-  var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
-  var to   = "aaaaeeeeiiiioooouuuunc------";
-  for (var i=0, l=from.length ; i<l ; i++) {
-      str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-  }
-
-  str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-      .replace(/\s+/g, '-') // collapse whitespace and replace by -
-      .replace(/-+/g, '-'); // collapse dashes
-
-  return str;
-}
-
-async function writeAtlasMappingsToDisk(activeDocName, atlasMappings) {
+// Open the OS panel for saving files and write
+async function writeAtlasJsonToDisk(fileName, atlasJson) {
   const fs = require("uxp").storage.localFileSystem;
-  const file = await fs.getFileForSaving(`${activeDocName}_output.json`, { types: [ "json" ]});
+  const file = await fs.getFileForSaving(`${fileName}.inkatlas.json`, {
+    types: ["json"],
+  });
   if (!file) {
     // file picker was cancelled
     return;
   }
-  const result = await file.write(JSON.stringify(atlasMappings));
+  const result = await file.write(JSON.stringify(atlasJson));
 }
 
+// Generic alerting in PS
 async function showAlert(message) {
-  const app = require('photoshop').app;
+  const app = require("photoshop").app;
   await app.showAlert(message);
 }
+
+
+document.querySelector("#btnArrange").addEventListener("click", evt => {
+  const textureSpacing = parseInt(document.querySelector("#textureSpacing").value);
+  fitLayers(textureSpacing);
+})
+
+document.querySelector("#btnGenerate").addEventListener("click", evt => {
+  const atlasFileName = document.querySelector("#atlasFileName").value;
+  const depotPath = document.querySelector("#texturePath").value
+  const depotPath1080p = document.querySelector("#texturePath1080p").value
+
+  writeAtlasFile(atlasFileName, depotPath, depotPath1080p);
+})
