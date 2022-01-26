@@ -1,8 +1,7 @@
-# Inkatlas UV Bounds Generator
+# Inkatlas Utils
+This is a photoshop plugin that assists in the creation of texture maps in Cyberpunk. Users can keep track of each icon/texture in a seperate named layer and automatically generate an `.inkatlas` file from it. Additionally, a "fitting" feature which automatically moves layers to optimize space in the texture map is available. After the icons/textures have been fitted, `.inkatlas` mappings can be generated off of them. Since these mappings use UV coordinates, the file can then be upscaled/downscaled so long as the aspect ratio is maintained. 
 
-This plugin generates the `parts` array required to create inkAtlas files in Wolvenkit. Rather than manually calculating the bounds of each icon on an inkAtlas sheet, this plugin will do so using layers in Photoshop. 
-
-The output may look something like this:
+The texture mapping output may look something like this:
 ```json
 [
   {
@@ -56,6 +55,8 @@ image.SetAtlasResource(r"\\base\\gameplay\\gui\\common\\icons\\<yourInkAtlasName
 image.SetTexturePart(n"aoba");
 ```
 3. Open the Plugins panel in Photoshop by going to Plugins -> Plugins Panel
-4. Run InkAtlas UV Bounds Generator
-5. Choose a destination to save the output JSON file to
-6. You can then copy and paste the resulting array into the `parts` array into the `.inkatlas` you exported from Wolvenkit.
+4. Open the Inkatlas Util plugin
+5. First run the "Fit Layers" function to automatically fit the layers efficiently
+6. Next, run the "Generate InkAtlas" to generate the atlas mappings.
+7. The generated `.inkatlas` file will be in the same directory as the `.psd` file you were working with.
+8. You should now be able to import the generated `.inkatlas` file in Wolvenkit.
