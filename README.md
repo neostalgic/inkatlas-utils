@@ -1,6 +1,8 @@
 # Inkatlas Utils
 This is a photoshop plugin that assists in the creation of texture maps in Cyberpunk. Users can keep track of each icon/texture in a seperate named layer and automatically generate an `.inkatlas` file from it. Additionally, a "fitting" feature which automatically moves layers to optimize space in the texture map is available. After the icons/textures have been fitted, `.inkatlas` mappings can be generated off of them. Since these mappings use UV coordinates, the file can then be upscaled/downscaled so long as the aspect ratio is maintained. 
 
+[![image.png](https://i.postimg.cc/Qx67QQtB/image.png)](https://postimg.cc/BXKts12s)
+
 The texture mapping output may look something like this:
 ```json
 [
