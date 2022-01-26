@@ -32,7 +32,29 @@
       },
       "label": {
         "default": "InkAtlas Utils"
-      }
+      },
+      "icons": [
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/plugin-icon.png",
+          "scale": [
+            1,
+            2
+          ],
+          "theme": [
+            "darkest",
+            "dark",
+            "medium",
+            "lightest",
+            "light",
+            "all"
+          ],
+          "species": [
+            "pluginList"
+          ]
+        }
+      ]
     }
   ],
   "icons": [
