@@ -23,21 +23,18 @@ When ready, you can then go to Plugins -> InkAtlas Utils and open the panel. See
 ### Fit Layers
 Will automatically arrange each layer in your Photoshop document (`.psd`) into the bounds of the current document. As document size increases, there may be no valid solution for packing all layers into your document - you must increase the canvas/image size until all layers fit or potentially get cut off textures when generating the `.inkatlas` file. Credit to: https://github.com/jakesgordon/bin-packing for the bin-packing library.
 
-_Params_
 * Texture Spacing
   * Determines how far apart each layer is spaced out. This spacing is factored into the packing algorithm described above.
 
 ### Export TGA
 This converts the active Photoshop document (`.psd`) into a `.tga` file that can then be imported into WolvenKit as an `.xbm`. This feature handles ensuring that alpha channels are properly created and the image is oriented correctly. Once you've created this file you can import it into WolvenKit.
 
-_Params_
 * Scale To
   * Scales down the image to the percentage specified in the input field. (e.g. if your image size is 4000x4000 a value of `25` will scale the exported `.tga` file down to 1000x1000)
 
 ### Generate InkAtlas
 This generates an `.inkatlas` file that can be imported into WolvenKit. It works by looking up each of the layer bounds and calculating the UV coordinates for each slice/mapping. It is important that after this step is done, no positioning changes are made to the `.tga`/`.xbm` file generated above. If changes _are_ made, please ensure the `.inkatlas` file is regenerated to reflect the new positioning of your textures in the texture map. Note that since `.inkatlas` uses UV coordinates instead of pixels there is no need to re-generate the file if the size of the `.xbm` changes.
 
-_Params_
 * InkAtlas Filename
   * Filename of the `.inkatlas` to generate. Should generally match the name you picked for your `.tga`/`.xbm` file from the previous step. *Do not* include the `.inkatlas` file extension in the input.
 * XBM Depot Path
@@ -48,6 +45,5 @@ _Params_
 ### Generate Sample Redscript Mod
 This generates a Redscript mod that you can use to verify your work. Simply choose a location you'd like the mod created then drag the `TextureSampleMod` folder to your `Cyberpunk 2077\r6\scripts\` folder.
 
-_Params_
 * InkAtlas Depot Path
   * The path of your `.inkatlas` resource after you have imported it into WolvenKit.
