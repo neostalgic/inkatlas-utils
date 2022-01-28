@@ -8,6 +8,7 @@
     sp-button {
         float: left;
         width: 100%;
+        margin-top: 10px;
     }
     sp-button:hover {
         cursor: pointer;
@@ -15,9 +16,16 @@
     sp-textfield {
         width: 100%;
     }
+    sp-divider {
+        margin-top: 25px;
+    }
     body {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
         color: white;
         padding: 0 48px;
+        padding-bottom: 50px;
+        overflow-y: auto;
     }
 
     li:before {
@@ -49,11 +57,17 @@
     </sp-textfield>
     Tip: Ensure that any layer that you do not want factored into this calculation is either
     locked or hidden.
-    <footer>
-        <sp-button id="btnArrange">Fit Layers</sp-button>
-    </footer>
-</body>
-<body>
+    <sp-button id="btnArrange">Fit Layers</sp-button>
+
+    <sp-heading id="exportTga">Export to TGA</sp-heading>
+    <sp-body>
+        Exports a TGA that can be imported into Wolvenkit as an XBM file.
+    </sp-body>
+    <sp-textfield id="scaleFactor" type="number" placeholder="25" value=25>
+        <sp-label for="scaleFactor" isrequired="true" slot="label">Scale To (Percentage)</sp-label>
+    </sp-textfield>
+    <sp-button id="btnExport">Export</sp-button>
+
     <sp-heading id="generateInkatlasTitle">Generate InkAtlas</sp-heading>
     <sp-body>
         Generates a .inkatlas JSON file that can be imported into the game
@@ -71,12 +85,8 @@
     Tip: You can find your XBM's path after you've imported your texture file into Wolvenkit by
     finding it in Project Explorer, Right Click -> Copy Relative Path. Also note that the slashes in the
     path must be escaped (e.g. \\base\\my\\path\\file.xbm).
-    <footer>
-        <sp-button id="btnGenerate">Generate InkAtlas</sp-button>
-    </footer>
-</body>
+    <sp-button id="btnGenerate">Generate InkAtlas</sp-button>
 
-<body>
     <sp-heading id="generateRedscript">Generate Sample Redscript Mod</sp-heading>
     <sp-body>
         Generates a sample Redscript mod that allows you to test your new texture atlas. 
@@ -85,10 +95,18 @@
     <sp-textfield id="redscriptTexturePath" placeholder=":path\\file.inkatlas" value="">
         <sp-label for="redscriptTexturePath" slot="label">Inkatlas Depot Path</sp-label>
     </sp-textfield>
-    Tip: Note that the slashes in the path must be escaped (e.g. \\base\\my\\path\\file.xbm).
-    <footer>
-        <sp-button id="btnRedscript">Generate Redscript Mod</sp-button>
-    </footer>
+    Tip: Note that the slashes in the path must be escaped (e.g. \\base\\my\\path\\file.inkatlas).
+    <sp-button id="btnRedscript">Generate Redscript Mod</sp-button>
+
+</body>
+<body>
+    
+</body>
+<body>
+
 </body>
 
+<body>
+
+</body>
 </html>

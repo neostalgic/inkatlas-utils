@@ -41,13 +41,14 @@ function generateRedscriptForlayer(layer, depotPath, rowNumber) {
         ${varName}.SetAtlasResource(r"${depotPath}");
         ${varName}.SetTexturePart(${cName});
         ${varName}.SetNineSliceScale(true);
-        ${varName}.SetMargin(new inkMargin(24.0, 24.0, 24.0, 0.0));
+        ${varName}.SetFitToContent(true);
+        ${varName}.SetMargin(new inkMargin(1.0, 1.0, 1.0, 1.0));
         ${varName}.SetHAlign(inkEHorizontalAlign.Left);
         ${varName}.SetVAlign(inkEVerticalAlign.Center);
         ${varName}.SetAnchorPoint(new Vector2(0.5, 0.5));
         ${varName}.SetOpacity(0.5);
+        ${varName}.SetScale(new Vector2(0.5, 0.5));
         ${varName}.SetTintColor(new HDRColor(1.3698, 0.4437, 0.4049, 1.0));
-        ${varName}.SetSize(new Vector2(100.0, 100.0));
         ${varName}.Reparent(textures_${rowNumber});
     `;
 

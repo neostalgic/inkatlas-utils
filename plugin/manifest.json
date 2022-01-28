@@ -15,7 +15,7 @@
       "type": "panel",
       "id": "ink-atlas-utils-panel",
       "minimumSize": {
-        "width": 230,
+        "width": 400,
         "height": 400
       },
       "maximumSize": {
@@ -23,11 +23,11 @@
         "height": 2000
       },
       "preferredDockedSize": {
-        "width": 230,
+        "width": 600,
         "height": 870
       },
       "preferredFloatingSize": {
-        "width": 400,
+        "width": 600,
         "height": 1000
       },
       "label": {
