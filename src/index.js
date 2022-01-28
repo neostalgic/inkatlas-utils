@@ -50,9 +50,7 @@ async function writeRedscriptSampleFile(depotPath) {
     const activeDoc = app.activeDocument;
     const existingRedscriptFile = await getExistingRedscriptFile();
     const existingRedscriptFileContents = await existingRedscriptFile.read();
-    console.log(existingRedscriptFile)
     const generatedRedscript = generateRedscriptFile(existingRedscriptFileContents, activeDoc, depotPath);
-    console.log(generatedRedscript);
     if (generatedRedscript) {
       const pluginDataFolder = await fs.getPluginFolder();
       const temp = await fs.getTemporaryFolder();
@@ -90,7 +88,6 @@ async function copyFolderRecursively(entry, destination) {
 async function getExistingRedscriptFile() {
   const fs = storage.localFileSystem;
   const pluginDataFolder = await fs.getPluginFolder();
-  console.log(pluginDataFolder);
   const templatesFolder = await pluginDataFolder.getEntry("resources/templates");
   return await templatesFolder.getEntry("Textures.reds");
 }
