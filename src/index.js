@@ -4,11 +4,24 @@ import { app, core } from "photoshop";
 import { fitLayersAndMove } from "./fit";
 import { generateAtlasJson } from "./atlas";
 import { generateRedscriptFile } from "./redscript";
+import { executeExport } from "./export";
 
 
 // Handle fitting layers together
 async function fitLayers(spacing) {
   fitLayersAndMove(spacing);
+}
+
+async function writeTgaFile(scaleFactor) {
+  const fs = storage.localFileSystem;
+  const file = await fs.getFileForSaving("output", {
+    types: ["tga"],
+  });
+  if (!file) {
+    // file picker was cancelled
+    return;
+  }
+  executeExport(file, scaleFactor);
 }
 
 // Generate the atlas file and write
@@ -53,11 +66,11 @@ async function writeRedscriptSampleFile(depotPath) {
     const generatedRedscript = generateRedscriptFile(existingRedscriptFileContents, activeDoc, depotPath);
     if (generatedRedscript) {
       const pluginDataFolder = await fs.getPluginFolder();
-      const temp = await fs.getTemporaryFolder();
+      const folder = await fs.getFolder();
       const existingModFolder = await pluginDataFolder.getEntry("resources/TextureSampleMod");
-      await copyFolderRecursively(existingModFolder, temp);
+      await copyFolderRecursively(existingModFolder, folder);
       
-      const coreModDirectory = await temp.getEntry("TextureSampleMod/SampleMod");
+      const coreModDirectory = await folder.getEntry("TextureSampleMod/SampleMod");
       const redscriptFile = await coreModDirectory.createFile("Textures.reds", { overwrite: true });
       await redscriptFile.write(generatedRedscript);
     } else {
@@ -92,13 +105,6 @@ async function getExistingRedscriptFile() {
   return await templatesFolder.getEntry("Textures.reds");
 }
 
-// Configure redscript file and write
-async function writeRedscriptSampleToDisk(redscriptContent) {
-  const fs = storage.localFileSystem;
-  const fileName = `sample.reds`;
-  await writeFile(fileName, "reds", redscriptContent);
-}
-
 // Open the OS panel for saving files and write
 async function writeFile(fileName, fileType, payload) {
   const fs = storage.localFileSystem;
@@ -118,19 +124,31 @@ async function showAlert(message) {
 }
 
 document.querySelector("#btnArrange").addEventListener("click", evt => {
+  evt.stopPropagation();
   const textureSpacing = parseInt(document.querySelector("#textureSpacing").value);
   fitLayers(textureSpacing);
+  evt.stopImmediatePropagation();
 })
 
 document.querySelector("#btnGenerate").addEventListener("click", evt => {
+  evt.stopPropagation();
   const atlasFileName = document.querySelector("#atlasFileName").value;
   const depotPath = document.querySelector("#texturePath").value
   const depotPath1080p = document.querySelector("#texturePath1080p").value
 
   writeAtlasFile(atlasFileName, depotPath, depotPath1080p);
+  evt.stopImmediatePropagation();
 })
 
 document.querySelector("#btnRedscript").addEventListener("click", evt => {
+  evt.stopPropagation();
   const depotPath = document.querySelector("#redscriptTexturePath").value
   writeRedscriptSampleFile(depotPath);
+  evt.stopImmediatePropagation();
+})
+
+document.querySelector("#btnExport").addEventListener("click", evt => {
+  const scaleFactor = parseFloat(document.querySelector("#scaleFactor").value)
+  writeTgaFile(scaleFactor);
+  evt.stopImmediatePropagation();
 })

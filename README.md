@@ -1,72 +1,53 @@
 # Inkatlas Utils
-This is a photoshop plugin that assists in the creation of texture maps in Cyberpunk. Users can keep track of each icon/texture in a seperate named layer and automatically generate an `.inkatlas` file from it. Additionally, a "fitting" feature which automatically moves layers to optimize space in the texture map is available. After the icons/textures have been fitted, `.inkatlas` mappings can be generated off of them. Since these mappings use UV coordinates, the file can then be upscaled/downscaled so long as the aspect ratio is maintained. 
+This is a Photoshop plugin that assists in the creation of texture maps in Cyberpunk 2077.
 
-[![image.png](https://i.imgur.com/ANYQJO7.png)](https://i.imgur.com/ANYQJO7.png)
+[![image.png](https://i.imgur.com/N0enev3.png)](https://i.imgur.com/N0enev3.png)
 
-The texture mapping output may look something like this:
-```json
-[
-  {
-    "Type": "inkTextureAtlasMapper",
-    "Properties": {
-      "clippingRectInPixels": {
-        "Type": "Rect",
-        "Properties": { "bottom": 0, "left": 0, "right": 0, "top": 0 }
-      },
-      "clippingRectInUVCoords": {
-        "Type": "RectF",
-        "Properties": {
-          "Bottom": 0.14697265625,
-          "Left": 0.001953125,
-          "Right": 0.11181640625,
-          "Top": 0.0009765625
-        }
-      },
-      "partName": "aoba"
-    }
-  },
-  {
-    "Type": "inkTextureAtlasMapper",
-    "Properties": {
-      "clippingRectInPixels": {
-        "Type": "Rect",
-        "Properties": { "bottom": 0, "left": 0, "right": 0, "top": 0 }
-      },
-      "clippingRectInUVCoords": {
-        "Type": "RectF",
-        "Properties": {
-          "Bottom": 0.148193359375,
-          "Left": 0.11376953125,
-          "Right": 0.221435546875,
-          "Top": 0.001953125
-        }
-      },
-      "partName": "aoba-alt"
-    }
-  }
-]
-```
+## Prerequisites
+- Adobe Photoshop 2022 
+- Currently requires the latest nightly build of WolvenKit: https://github.com/WolvenKit/WolvenKit-nightly-releases/releases
+- For testing purposes, the latest copy of Redscript must be installed (Optional)
+
+## Installation
+1. Download the latest `inkatlas-utils_PS.ccx` at https://github.com/deadlymustard/inkatlas-utils/releases.
+2. Double click the downloaded `inkatlas-utils_PS.ccx` to add the Plugin to Photoshop.
 
 ## Usage
+If you're creating a new texture map from scratch you will want to open Photoshop and create a new file. For the best results, ensure that a `Background` layer exists and is locked. This layer will be ignored in any processing done in the plugin.
 
-### Generate InkAtlas Files
-1. First, arrange each texture in a seperate layer in Photoshop and position them exactly how you'd like the texture map to be setup in the game.
-2. Next, give each layer a name - the layer name will be used to generate the `partName` which can then subsequently be accesed in the game via a CNAME. 
-Ex. (In Redscript)
-```swift
-image.SetAtlasResource(r"\\base\\gameplay\\gui\\common\\icons\\<yourInkAtlasName>.inkatlas");
-image.SetTexturePart(n"aoba");
-```
-3. Open the Plugins panel in Photoshop by going to Plugins -> Plugins Panel
-4. Open the Inkatlas Util plugin
-5. First run the "Fit Layers" function to automatically fit the layers efficiently
-6. Next, run the "Generate InkAtlas" to generate the atlas mappings.
-7. The generated `.inkatlas` file will be in the same directory as the `.psd` file you were working with.
-8. You should now be able to import the generated `.inkatlas` file in Wolvenkit.
+From there, you can begin creating layers. Try to keep each individual texture in its own layer and *ensure the layer has an appropriate name* the name will be used to access your texture via Redscript.
 
-### Generate A Sample Redscript Mod
-You can also generate a redscript mod that allows you to immediately test that each one of your assets are appearing correctly. Currently this gets written out to temp directory. Which should be under: `C:\Users\regds\AppData\Local\Temp\Adobe\UXP\PluginsStorage\PHSP\23\Developer\inkatlas-utils\PluginData`. 
+When ready, you can then go to Plugins -> InkAtlas Utils and open the panel. See the features below for more usage guidelines.
 
-1. Click the button to generate the mod
-2. You can then drag and drop the `TextureSampleMod` to your `r6/scripts` folder in Cyberpunk. 
-3. Load a savegame and once in the game hold the "R" button until a panel opens. You will see a preview of each of your assets.
+## Features
+### Fit Layers
+Will automatically arrange each layer in your Photoshop document (`.psd`) into the bounds of the current document. As document size increases, there may be no valid solution for packing all layers into your document - you must increase the canvas/image size until all layers fit or potentially get cut off textures when generating the `.inkatlas` file. Credit to: https://github.com/jakesgordon/bin-packing for the bin-packing library.
+
+_Params_
+* Texture Spacing
+  * Determines how far apart each layer is spaced out. This spacing is factored into the packing algorithm described above.
+
+### Export TGA
+This converts the active Photoshop document (`.psd`) into a `.tga` file that can then be imported into WolvenKit as an `.xbm`. This feature handles ensuring that alpha channels are properly created and the image is oriented correctly. Once you've created this file you can import it into WolvenKit.
+
+_Params_
+* Scale To
+  * Scales down the image to the percentage specified in the input field. (e.g. if your image size is 4000x4000 a value of `25` will scale the exported `.tga` file down to 1000x1000)
+
+### Generate InkAtlas
+This generates an `.inkatlas` file that can be imported into WolvenKit. It works by looking up each of the layer bounds and calculating the UV coordinates for each slice/mapping. It is important that after this step is done, no positioning changes are made to the `.tga`/`.xbm` file generated above. If changes _are_ made, please ensure the `.inkatlas` file is regenerated to reflect the new positioning of your textures in the texture map. Note that since `.inkatlas` uses UV coordinates instead of pixels there is no need to re-generate the file if the size of the `.xbm` changes.
+
+_Params_
+* InkAtlas Filename
+  * Filename of the `.inkatlas` to generate. Should generally match the name you picked for your `.tga`/`.xbm` file from the previous step. *Do not* include the `.inkatlas` file extension in the input.
+* XBM Depot Path
+  * The path of the resource to apply your texture map to. If you've already imported the `.tga` file into WolvenKit - you should be able to find the corresponding `.xbm` file in the Project Explorer. (ex. `base\\gameplay\\gui\\common\\icons\\corporations.xbm` ).
+* XBM Depot Path (1080p)
+  * Same as above, but a smaller version of your texture. (ex. `base\\gameplay\\gui\\common\\icons\\corporations_1080p.xbm` ).
+
+### Generate Sample Redscript Mod
+This generates a Redscript mod that you can use to verify your work. Simply choose a location you'd like the mod created then drag the `TextureSampleMod` folder to your `Cyberpunk 2077\r6\scripts\` folder.
+
+_Params_
+* InkAtlas Depot Path
+  * The path of your `.inkatlas` resource after you have imported it into WolvenKit.
