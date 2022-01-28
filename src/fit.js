@@ -1,9 +1,9 @@
-const { packer } = require("./dist/packer");
+const packer = require("../lib/packer");
+import { app, core } from "photoshop";
 
-module.exports = { fitLayersAndMove };
+export { fitLayersAndMove };
 
-
-async function fitLayersAndMove(app, core, spacing) {
+async function fitLayersAndMove(spacing) {
     const activeDoc = app.activeDocument;
     const height = activeDoc.height;
     const width = activeDoc.width;
@@ -21,10 +21,10 @@ async function fitLayersAndMove(app, core, spacing) {
     var packer = new Packer(width, height);
     packer.fit(layerBlocks);
     
-    executeLayerMove(core, layerMap, layerBlocks);
+    executeLayerMove(layerMap, layerBlocks);
   }
 
-  async function executeLayerMove(core, layerMap, layerBlocks) {
+  async function executeLayerMove(layerMap, layerBlocks) {
     await core.executeAsModal(
         async () => {
           for (let layerBlock of layerBlocks) {

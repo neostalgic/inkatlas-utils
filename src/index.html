@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="index.js"></script>
+</head>
+<style>
+    sp-button {
+        float: left;
+        width: 100%;
+    }
+    sp-button:hover {
+        cursor: pointer;
+    }
+    sp-textfield {
+        width: 100%;
+    }
+    body {
+        color: white;
+        padding: 0 48px;
+    }
+
+    li:before {
+        content: '• ';
+        width: 3em;
+    }
+
+    #layers {
+        border: 1px solid #808080;
+        border-radius: 4px;
+        padding: 16px;
+        overflow: scroll;
+        height: 160px;
+    }
+
+    footer {
+        display: flex;
+        justify-content: space-around;
+    }
+</style>
+
+<body>
+    <sp-heading id="fitLayerTitle">Fit Layers</sp-heading>
+    <sp-body>
+        Automatically arranges each layer in the file in an optimal manner.
+    </sp-body>
+    <sp-textfield id="textureSpacing" type="number" value="16">
+        <sp-label for="textureSpacing" isrequired="true" slot="label">Spacing Between Textures (px)</sp-label>
+    </sp-textfield>
+    Tip: Ensure that any layer that you do not want factored into this calculation is either
+    locked or hidden.
+    <footer>
+        <sp-button id="btnArrange">Fit Layers</sp-button>
+    </footer>
+</body>
+<body>
+    <sp-heading id="generateInkatlasTitle">Generate InkAtlas</sp-heading>
+    <sp-body>
+        Generates a .inkatlas JSON file that can be imported into the game
+        via Wolvenkit.
+    </sp-body>
+    <sp-textfield id="atlasFileName" placeholder="Desired filename" value="">
+        <sp-label for="atlasFileName" isrequired="true" slot="label">InkAtlas Filename</sp-label>
+    </sp-textfield>
+    <sp-textfield id="texturePath" placeholder="path\\file.xbm" value="">
+        <sp-label for="texturePath" slot="label">XBM Depot Path</sp-label>
+    </sp-textfield>
+    <sp-textfield id="texturePath1080p" placeholder=":path\\file_1080p.xbm" value="">
+        <sp-label for="texturePath1080p" slot="label">XBM Depot Path (1080p)</sp-label>
+    </sp-textfield>
+    Tip: You can find your XBM's path after you've imported your texture file into Wolvenkit by
+    finding it in Project Explorer, Right Click -> Copy Relative Path. Also note that the slashes in the
+    path must be escaped (e.g. \\base\\my\\path\\file.xbm).
+    <footer>
+        <sp-button id="btnGenerate">Generate InkAtlas</sp-button>
+    </footer>
+</body>
+
+<body>
+    <sp-heading id="generateRedscript">Generate Sample Redscript Mod</sp-heading>
+    <sp-body>
+        Generates a sample Redscript mod that allows you to test your new texture atlas. 
+        See <a href="https://github.com/deadlymustard/inkatlas-utils">README.md</a> me for further instructions. 
+    </sp-body>
+    <sp-textfield id="redscriptTexturePath" placeholder=":path\\file.inkatlas" value="">
+        <sp-label for="redscriptTexturePath" slot="label">Inkatlas Depot Path</sp-label>
+    </sp-textfield>
+    Tip: Note that the slashes in the path must be escaped (e.g. \\base\\my\\path\\file.xbm).
+    <footer>
+        <sp-button id="btnRedscript">Generate Redscript Mod</sp-button>
+    </footer>
+</body>
+
+</html>

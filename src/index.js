@@ -1,0 +1,139 @@
+import { storage } from "uxp";
+import { app, core } from "photoshop";
+
+import { fitLayersAndMove } from "./fit";
+import { generateAtlasJson } from "./atlas";
+import { generateRedscriptFile } from "./redscript";
+
+
+// Handle fitting layers together
+async function fitLayers(spacing) {
+  fitLayersAndMove(spacing);
+}
+
+// Generate the atlas file and write
+async function writeAtlasFile(fileName, depotPath, depotPath1080p) {
+  try {
+    if (app.documents.length == 0) {
+      showAlert("Please open at least one document.");
+      return;
+    }
+    const activeDoc = app.activeDocument;
+    const atlasJson = generateAtlasJson(activeDoc, depotPath, depotPath1080p);
+    if (atlasJson) {
+      await writeAtlasJsonToDisk(fileName, atlasJson);
+    } else {
+      showAlert("Could not get any layer names.");
+    }
+  } catch (err) {
+    showAlert(`Error occurred getting layer names: ${err.message}`);
+  }
+}
+
+// Stringify atlas file and write
+async function writeAtlasJsonToDisk(fileName, atlasJson) {
+  const fs = storage.localFileSystem;
+  const atlasFileName = `${fileName}.inkatlas.json`;
+  const jsonPayload = JSON.stringify(atlasJson);
+  await writeFile(atlasFileName, "json", jsonPayload);
+}
+
+// Generate sample redscript and write to disk
+async function writeRedscriptSampleFile(depotPath) {
+  const fs = storage.localFileSystem;
+
+  try {
+    if (app.documents.length == 0) {
+      showAlert("Please open at least one document.");
+      return;
+    }
+    const activeDoc = app.activeDocument;
+    const existingRedscriptFile = await getExistingRedscriptFile();
+    const existingRedscriptFileContents = await existingRedscriptFile.read();
+    console.log(existingRedscriptFile)
+    const generatedRedscript = generateRedscriptFile(existingRedscriptFileContents, activeDoc, depotPath);
+    console.log(generatedRedscript);
+    if (generatedRedscript) {
+      const pluginDataFolder = await fs.getPluginFolder();
+      const temp = await fs.getTemporaryFolder();
+      const existingModFolder = await pluginDataFolder.getEntry("resources/TextureSampleMod");
+      await copyFolderRecursively(existingModFolder, temp);
+      
+      const coreModDirectory = await temp.getEntry("TextureSampleMod/SampleMod");
+      const redscriptFile = await coreModDirectory.createFile("Textures.reds", { overwrite: true });
+      await redscriptFile.write(generatedRedscript);
+    } else {
+      showAlert("Could not generate Redscript mod files.");
+    }
+  } catch (err) {
+    showAlert(`Error occurred getting layer names: ${err.message}`);
+  }
+}
+
+async function copyFolderRecursively(entry, destination) {
+  if (entry.isFolder) {
+    let childFolder;
+    try {
+      childFolder = await destination.getEntry(entry.name);
+    } catch (e) {
+      childFolder = await destination.createFolder(entry.name);
+    }
+    const entries = await entry.getEntries();
+    for(const childEntry of entries) {
+      await copyFolderRecursively(childEntry, childFolder);
+    }
+  } else {
+    await entry.copyTo(destination, { overwrite: true });
+  }
+}
+
+async function getExistingRedscriptFile() {
+  const fs = storage.localFileSystem;
+  const pluginDataFolder = await fs.getPluginFolder();
+  console.log(pluginDataFolder);
+  const templatesFolder = await pluginDataFolder.getEntry("resources/templates");
+  return await templatesFolder.getEntry("Textures.reds");
+}
+
+// Configure redscript file and write
+async function writeRedscriptSampleToDisk(redscriptContent) {
+  const fs = storage.localFileSystem;
+  const fileName = `sample.reds`;
+  await writeFile(fileName, "reds", redscriptContent);
+}
+
+// Open the OS panel for saving files and write
+async function writeFile(fileName, fileType, payload) {
+  const fs = storage.localFileSystem;
+  const file = await fs.getFileForSaving(fileName, {
+    types: [fileType],
+  });
+  if (!file) {
+    // file picker was cancelled
+    return;
+  }
+  const result = await file.write(payload);
+}
+
+// Generic alerting in PS
+async function showAlert(message) {
+  await app.showAlert(message);
+}
+
+document.querySelector("#btnArrange").addEventListener("click", evt => {
+  const textureSpacing = parseInt(document.querySelector("#textureSpacing").value);
+  fitLayers(textureSpacing);
+})
+
+document.querySelector("#btnGenerate").addEventListener("click", evt => {
+  const atlasFileName = document.querySelector("#atlasFileName").value;
+  const depotPath = document.querySelector("#texturePath").value
+  const depotPath1080p = document.querySelector("#texturePath1080p").value
+
+  writeAtlasFile(atlasFileName, depotPath, depotPath1080p);
+})
+
+document.querySelector("#btnRedscript").addEventListener("click", evt => {
+  const depotPath = document.querySelector("#redscriptTexturePath").value
+  writeRedscriptSampleFile(depotPath);
+})

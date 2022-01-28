@@ -1,12 +1,12 @@
+export { inkAtlasTemplate, blah };
+
 const inkAtlasTemplate = function () {
   return JSON.parse(JSON.stringify(_inkAtlasTemplate));
 };
 
-const atlasMappingTemplate = function () {
+const blah = function () {
   return JSON.parse(JSON.stringify(_atlasMappingTemplate));
 };
-
-module.exports = { inkAtlasTemplate, atlasMappingTemplate };
 
 const _inkAtlasTemplate = {
   WolvenKitVersion: "8.5.0",

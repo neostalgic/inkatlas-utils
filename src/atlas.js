@@ -1,10 +1,10 @@
-const templates = require("./templates");
-const utils = require("./utils");
+import { inkAtlasTemplate, blah } from "./templates";
+import { slugify } from "./utils";
 
-module.exports = { generateAtlasJson };
+export { generateAtlasJson };
 
 function generateAtlasJson(activeDoc, depotPath, depotPath1080p) {
-  const atlasTemplate = templates.inkAtlasTemplate();
+  const atlasTemplate = inkAtlasTemplate();
   const atlasMappings = generateAtlasMappings(activeDoc);
 
   atlasTemplate.Data.RootChunk.Properties.slots.Elements[0].Properties.texture.DepotPath =
@@ -31,7 +31,7 @@ function generateAtlasMappingForLayer(activeDoc, layer) {
   const height = activeDoc.height;
   const width = activeDoc.width;
 
-  const atlasMappingTemplate = templates.atlasMappingTemplate();
+  const atlasMappingTemplate = blah();
 
   atlasMappingTemplate.Properties.clippingRectInUVCoords.Properties = {
     Bottom: layer.bounds.bottom / height,
@@ -39,7 +39,7 @@ function generateAtlasMappingForLayer(activeDoc, layer) {
     Right: layer.bounds.right / width,
     Top: layer.bounds.top / height,
   };
-  atlasMappingTemplate.Properties.partName = utils.slugify(layer.name);
+  atlasMappingTemplate.Properties.partName = slugify(layer.name);
 
   return atlasMappingTemplate;
 }
