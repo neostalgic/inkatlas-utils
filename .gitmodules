@@ -1,0 +1,3 @@
+[submodule "resources/TextureSampleMod/cp2077-codeware"]
+	path = resources/TextureSampleMod/cp2077-codeware
+	url = https://github.com/psiberx/cp2077-codeware.git
