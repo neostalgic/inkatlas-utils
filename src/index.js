@@ -5,6 +5,7 @@ import { fitLayersAndMove } from "./fit";
 import { generateAtlasJson } from "./atlas";
 import { generateRedscriptFile } from "./redscript";
 import { executeExport } from "./export";
+import { showAlert } from "./utils";
 
 
 // Handle fitting layers together
@@ -116,11 +117,6 @@ async function writeFile(fileName, fileType, payload) {
     return;
   }
   const result = await file.write(payload);
-}
-
-// Generic alerting in PS
-async function showAlert(message) {
-  await app.showAlert(message);
 }
 
 document.querySelector("#btnArrange").addEventListener("click", evt => {

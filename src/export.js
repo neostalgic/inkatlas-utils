@@ -1,13 +1,13 @@
 import { storage } from "uxp";
 import { app, core } from "photoshop";
 
+import { showAlert } from "./utils";
+
 export { executeExport };
 
 async function executeExport(file, scaleFactor) {
     const fs = storage.localFileSystem;
     const saveFile = await fs.createSessionToken(file);
-    console.log(saveFile);
-
     const batchPlayAction = [
         {
           _obj: "hide",
@@ -123,15 +123,14 @@ async function executeExport(file, scaleFactor) {
             ]
         }
       ];
-
-      console.log(batchPlayAction);
     
     await core.executeAsModal(
         async () => {
             try {
-                const blah = await app.batchPlay(batchPlayAction);
+                await app.batchPlay(batchPlayAction);
             } catch (e) {
                 console.log(e);
+                showAlert(`Error occured while exporting: ${e.message}`);
             }
         },
         { commandName: "Export as TGA" }
