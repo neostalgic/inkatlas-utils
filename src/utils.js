@@ -1,4 +1,6 @@
-export { slugify, generateVarName };
+import { app } from "photoshop";
+
+export { slugify, generateVarName, showAlert };
 
 function slugify(str) {
   str = str.replace(/^\s+|\s+$/g, ""); // trim
@@ -36,5 +38,10 @@ function generateVarName(str) {
     .replace(/\s+/g, "") // collapse whitespace
 
   return str;
+}
+
+// Generic alerting in PS
+async function showAlert(message) {
+  await app.showAlert(message);
 }
 

@@ -1,5 +1,6 @@
 const packer = require("../lib/packer");
 import { app, core } from "photoshop";
+import { showAlert } from "./utils";
 
 export { fitLayersAndMove };
 
@@ -18,16 +19,22 @@ async function fitLayersAndMove(spacing) {
         return { w: value.bounds.width + spacing, h: value.bounds.height + spacing, id: value.name };
       });
   
+
     var packer = new Packer(width, height);
     packer.fit(layerBlocks);
-    
+
     executeLayerMove(layerMap, layerBlocks);
   }
 
   async function executeLayerMove(layerMap, layerBlocks) {
+    const fittedBlocks = layerBlocks.filter(block => !!block.fit);
+    const notFittedBlocks = layerBlocks
+      .filter(block => !block.fit && block.id !== 'Background')
+      .map(block => block.id);
+  
     await core.executeAsModal(
         async () => {
-          for (let layerBlock of layerBlocks) {
+          for (let layerBlock of fittedBlocks) {
             let layer = layerMap.get(layerBlock.id);
     
             const currentX = layer.bounds.left;
@@ -58,4 +65,7 @@ async function fitLayersAndMove(spacing) {
         },
         { commandName: "Fit Layers" }
       );
+      if (notFittedBlocks.length > 0) {
+        showAlert(`Could not fit layers: ${notFittedBlocks}`);
+      }
   }
