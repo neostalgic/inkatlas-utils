@@ -5,10 +5,11 @@ import { showAlert } from "./utils";
 export { fitLayersAndMove };
 
 async function fitLayersAndMove(spacing) {
+    await sortByHeight();
     const activeDoc = app.activeDocument;
     const height = activeDoc.height;
     const width = activeDoc.width;
-  
+
     let layerMap = new Map(activeDoc.layers.map((layer) => [layer.name, layer]));
   
     let layerBlocks = Array.from(layerMap)
@@ -68,4 +69,55 @@ async function fitLayersAndMove(spacing) {
       if (notFittedBlocks.length > 0) {
         showAlert(`Could not fit layers: ${notFittedBlocks}`);
       }
+  }
+
+  async function sortByHeight() {
+    const activeDoc = app.activeDocument;
+    let sortedLayers = activeDoc.layers
+    .filter(layer => layer.name !== "Background")
+    .sort((layerA, layerB) => {
+      return layerA.bounds.height - layerB.bounds.height;
+    });
+    
+    let batchPlayCommand = [];
+  
+    for (let layer of sortedLayers) {
+      const selectLayer = {
+        "_obj": "select",
+        "_target": [
+            {
+              "_ref": "layer",
+              "_name": `${layer.name}`
+            }
+        ],
+        "makeVisible": false,
+        "layerID": [
+          `${layer.id}`
+        ]
+      };
+     const bringLayerToFront = {
+        "_obj": "move",
+        "_target": [
+          {
+              "_ref": "layer",
+              "_enum": "ordinal",
+              "_value": "targetEnum"
+          }
+        ],
+        "to": {
+          "_ref": "layer",
+          "_enum": "ordinal",
+          "_value": "front"
+        }
+      }
+      batchPlayCommand.push(...[selectLayer, bringLayerToFront]);
+    }
+  
+    await core.executeAsModal(async() => {
+      try {
+        await app.batchPlay(batchPlayCommand)
+      } catch (e) {
+        console.log(e);
+      }
+    }, { commandName: "Sort Layers" });
   }
