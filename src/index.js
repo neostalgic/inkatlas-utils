@@ -53,7 +53,7 @@ async function writeAtlasJsonToDisk(fileName, atlasJson) {
 }
 
 // Generate sample redscript and write to disk
-async function writeRedscriptSampleFile(depotPath) {
+async function writeRedscriptSampleFile(depotPath, scalingFactor) {
   const fs = storage.localFileSystem;
 
   try {
@@ -64,7 +64,7 @@ async function writeRedscriptSampleFile(depotPath) {
     const activeDoc = app.activeDocument;
     const existingRedscriptFile = await getExistingRedscriptFile();
     const existingRedscriptFileContents = await existingRedscriptFile.read();
-    const generatedRedscript = generateRedscriptFile(existingRedscriptFileContents, activeDoc, depotPath);
+    const generatedRedscript = generateRedscriptFile(existingRedscriptFileContents, activeDoc, depotPath, scalingFactor);
     if (generatedRedscript) {
       const pluginDataFolder = await fs.getPluginFolder();
       const folder = await fs.getFolder();
@@ -119,6 +119,10 @@ async function writeFile(fileName, fileType, payload) {
   const result = await file.write(payload);
 }
 
+function escapeSlashes(path) {
+  return path.replace(/(?<!\\)\\(?!\\)/g, "\\\\");
+}
+
 document.querySelector("#btnArrange").addEventListener("click", evt => {
   evt.stopPropagation();
   const textureSpacing = parseInt(document.querySelector("#textureSpacing").value);
@@ -138,8 +142,10 @@ document.querySelector("#btnGenerate").addEventListener("click", evt => {
 
 document.querySelector("#btnRedscript").addEventListener("click", evt => {
   evt.stopPropagation();
-  const depotPath = document.querySelector("#redscriptTexturePath").value
-  writeRedscriptSampleFile(depotPath);
+  const depotPath = escapeSlashes(document.querySelector("#redscriptTexturePath").value);
+  const scalingFactor = document.querySelector("#redscriptIconScale").value
+  console.log(depotPath);
+  writeRedscriptSampleFile(depotPath, scalingFactor);
   evt.stopImmediatePropagation();
 })
 
@@ -147,4 +153,13 @@ document.querySelector("#btnExport").addEventListener("click", evt => {
   const scaleFactor = parseFloat(document.querySelector("#scaleFactor").value)
   writeTgaFile(scaleFactor);
   evt.stopImmediatePropagation();
+})
+
+document.querySelectorAll("sp-textfield").forEach(item => {
+  item.addEventListener('paste', evt => {
+    let paste = (evt.clipboardData || window.clipboardData).getData('text');
+    let escaped = escapeSlashes(paste);
+    item.value = escaped;
+    evt.stopImmediatePropagation();
+  })
 })

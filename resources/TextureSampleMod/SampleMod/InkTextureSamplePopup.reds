@@ -18,8 +18,8 @@ public class InkTextureSamplePopup extends InGamePopup {
 
 		this.m_translator = LocalizationSystem.GetInstance(this.GetGame());
 
-		this.m_container.SetHeight(1080.0);
-		this.m_container.SetWidth(1920.0);
+		this.m_container.SetHeight(1440.0);
+		this.m_container.SetWidth(2560.0);
 
 		this.m_header = InGamePopupHeader.Create();
 		this.m_header.SetTitle(this.m_translator.GetText("InkPlayground-Popup-Title"));

@@ -22,7 +22,9 @@ function generateAtlasJson(activeDoc, depotPath, depotPath1080p) {
 
 function generateAtlasMappings(activeDoc) {
   const allLayers = activeDoc.layers;
-  return allLayers.map((layer) =>
+  return allLayers
+  .filter(layer => layer.name !== 'Background')
+  .map((layer) =>
     generateAtlasMappingForLayer(activeDoc, layer)
   );
 }

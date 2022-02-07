@@ -32,43 +32,55 @@ async function fitLayersAndMove(spacing) {
     const notFittedBlocks = layerBlocks
       .filter(block => !block.fit && block.id !== 'Background')
       .map(block => block.id);
-  
-    await core.executeAsModal(
-        async () => {
-          for (let layerBlock of fittedBlocks) {
-            let layer = layerMap.get(layerBlock.id);
+
+    let batchPlayCommand = [];
+    for (let layerBlock of fittedBlocks) {
+      let layer = layerMap.get(layerBlock.id);
     
-            const currentX = layer.bounds.left;
-            const currentY = layer.bounds.top;
-            const desiredX = layerBlock.fit.x;
-            const desiredY = layerBlock.fit.y;
-            const translateX = desiredX - currentX;
-            const translateY = desiredY - currentY;
-    
-            await app.batchPlay([
-              {
-                _obj: "select",
-                _target: [{ _name: layerBlock.id, _ref: "layer" }],
-                layerID: [32],
-                makeVisible: false,
-              },
-              {
-                _obj: "move",
-                _target: [{ _enum: "ordinal", _ref: "layer" }],
-                to: {
-                  _obj: "offset",
-                  horizontal: { _unit: "pixelsUnit", _value: translateX },
-                  vertical: { _unit: "pixelsUnit", _value: translateY },
-                },
-              },
-            ]);
-          }
+      const currentX = layer.bounds.left;
+      const currentY = layer.bounds.top;
+      const desiredX = layerBlock.fit.x;
+      const desiredY = layerBlock.fit.y;
+      const translateX = desiredX - currentX;
+      const translateY = desiredY - currentY;
+
+      const selectLayer = {
+        _obj: "select",
+        _target: [{ _name: layerBlock.id, _ref: "layer" }],
+        layerID: [32],
+        makeVisible: false,
+      };
+
+      const moveLayer = {
+        _obj: "move",
+        _target: [{ _enum: "ordinal", _ref: "layer" }],
+        to: {
+          _obj: "offset",
+          horizontal: { _unit: "pixelsUnit", _value: translateX },
+          vertical: { _unit: "pixelsUnit", _value: translateY },
         },
-        { commandName: "Fit Layers" }
-      );
-      if (notFittedBlocks.length > 0) {
-        showAlert(`Could not fit layers: ${notFittedBlocks}`);
+      };
+
+      batchPlayCommand.push(...[selectLayer, moveLayer]);
+    }
+
+    await core.executeAsModal(async() => {
+      try {
+        await app.batchPlay(
+          batchPlayCommand,
+          { "historyStateInfo": {
+            "name": "Fit Layers",
+            "target": [ {_ref: "document", _id: app.activeDocument.id}]
+          }}
+        )
+      } catch (e) {
+        console.log(e);
       }
+    }, { commandName: "Sort Layers" });
+
+    if (notFittedBlocks.length > 0) {
+      showAlert(`Could not fit layers: ${notFittedBlocks}`);
+    }
   }
 
   async function sortByHeight() {
@@ -115,7 +127,13 @@ async function fitLayersAndMove(spacing) {
   
     await core.executeAsModal(async() => {
       try {
-        await app.batchPlay(batchPlayCommand)
+        await app.batchPlay(
+          batchPlayCommand,
+          {"historyStateInfo": {
+            "name": "Sort Layers By Height",
+            "target": [ {_ref: "document", _id: app.activeDocument.id}]
+          }}
+        )
       } catch (e) {
         console.log(e);
       }

@@ -66,6 +66,7 @@
     <sp-textfield id="scaleFactor" type="number" placeholder="25" value=25>
         <sp-label for="scaleFactor" isrequired="true" slot="label">Scale To (Percentage)</sp-label>
     </sp-textfield>
+    Tip: Due to a limitation with Photoshop's API This will modify the current document. You can simply undo the export step to retrieve the document before you exported it.
     <sp-button id="btnExport">Export</sp-button>
 
     <sp-heading id="generateInkatlasTitle">Generate InkAtlas</sp-heading>
@@ -94,6 +95,9 @@
     </sp-body>
     <sp-textfield id="redscriptTexturePath" placeholder=":path\\file.inkatlas" value="">
         <sp-label for="redscriptTexturePath" slot="label">Inkatlas Depot Path</sp-label>
+    </sp-textfield>
+    <sp-textfield id="redscriptIconScale" type="number" placeholder="50" value="50">
+        <sp-label for="redscriptIconScale" slot="label">Icon Scale (Percentage)</sp-label>
     </sp-textfield>
     Tip: Note that the slashes in the path must be escaped (e.g. \\base\\my\\path\\file.inkatlas).
     <sp-button id="btnRedscript">Generate Redscript Mod</sp-button>
