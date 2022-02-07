@@ -8,6 +8,12 @@ export { executeExport };
 async function executeExport(file, scaleFactor) {
     const fs = storage.localFileSystem;
     const saveFile = await fs.createSessionToken(file);
+    const activeDoc = app.activeDocument;
+    const background = activeDoc.layers.find(layer => layer.name === 'Background');
+
+    if (!background || background.hidden) {
+      showAlert("Please ensure your file contains a black background that is not hidden.");
+    }
     const batchPlayAction = [
         {
           _obj: "hide",
@@ -105,15 +111,6 @@ async function executeExport(file, scaleFactor) {
           lowerCase: true
         },
         {
-            _obj: "select",
-            _target: [
-              {
-                _offset: -5,
-                _ref: "historyState"
-              }
-            ]
-        },
-        {
             _obj: "show",
             null: [
               {
@@ -127,7 +124,10 @@ async function executeExport(file, scaleFactor) {
     await core.executeAsModal(
         async () => {
             try {
-                await app.batchPlay(batchPlayAction);
+                await app.batchPlay(batchPlayAction, {"historyStateInfo": {
+                  "name": "Export TGA",
+                  "target": [ {_ref: "document", _id: app.activeDocument.id}]
+              }});
             } catch (e) {
                 console.log(e);
                 showAlert(`Error occured while exporting: ${e.message}`);
