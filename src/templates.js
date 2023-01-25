@@ -32,47 +32,47 @@ const _inkAtlasTemplate = {
           DepotPath: 0,
           Flags: "Default",
         },
-        isSingleTextureMode: 1,
-        parts: [],
-        slices: [],
-        slots: {
-          Size: 3,
-          Elements: [
-            {
-              $type: "inkTextureSlot",
-              parts: [],
-              slices: [],
-              texture: {
-                DepotPath: "",
-                Flags: "Default",
-              },
-            },
-            {
-              $type: "inkTextureSlot",
-              parts: [],
-              slices: [],
-              texture: {
-                DepotPath: "",
-                Flags: "Default",
-              },
-            },
-            {
-              $type: "inkTextureSlot",
-              parts: [],
-              slices: [],
-              texture: {
-                DepotPath: 0,
-                Flags: "Default",
-              },
-            },
-          ],
-        },
-        texture: {
-          DepotPath: 0,
-          Flags: "Default",
-        },
-        textureResolution: "UltraHD_3840_2160",
       },
+      isSingleTextureMode: 1,
+      parts: [],
+      slices: [],
+      slots: {
+        Size: 3,
+        Elements: [
+          {
+            $type: "inkTextureSlot",
+            parts: [],
+            slices: [],
+            texture: {
+              DepotPath: "",
+              Flags: "Soft",
+            },
+          },
+          {
+            $type: "inkTextureSlot",
+            parts: [],
+            slices: [],
+            texture: {
+              DepotPath: "",
+              Flags: "Soft",
+            },
+          },
+          {
+            $type: "inkTextureSlot",
+            parts: [],
+            slices: [],
+            texture: {
+              DepotPath: 0,
+              Flags: "Default",
+            },
+          },
+        ],
+      },
+      texture: {
+        DepotPath: 0,
+        Flags: "Default",
+      },
+      textureResolution: "UltraHD_3840_2160",
     },
     EmbeddedFiles: [],
   },
