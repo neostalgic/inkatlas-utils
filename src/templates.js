@@ -9,31 +9,28 @@ const blah = function () {
 };
 
 const _inkAtlasTemplate = {
-  WolvenKitVersion: "8.5.0",
-  WKitJsonVersion: "0.0.1",
+  WolvenKitVersion: "8.8.1",
+  WKitJsonVersion: "0.0.3",
   ExportedDateTime: "2022-01-25T19:03:40.1193136Z",
+  DataType: "CR2W",
   ArchiveFileName: "",
   Data: {
+    Version: 195,
+    BuildVersion: 0,
     RootChunk: {
-      Type: "inkTextureAtlas",
-      Id: "1",
-      Properties: {
-        activeTexture: "StaticTexture",
-        cookingPlatform: "PLATFORM_PC",
-        dynamicTexture: {
-          DepotPath: null,
+      $type: "inkTextureAtlas",
+      activeTexture: "StaticTexture",
+      cookingPlatform: "PLATFORM_PC",
+      dynamicTexture: {
+        DepotPath: 0,
+        Flags: "Default",
+      },
+      dynamicTextureSlot: {
+        $type: "inkDynamicTextureSlot",
+        parts: [],
+        texture: {
+          DepotPath: 0,
           Flags: "Default",
-        },
-        dynamicTextureSlot: {
-          Type: "inkDynamicTextureSlot",
-          Id: "2",
-          Properties: {
-            parts: [],
-            texture: {
-              DepotPath: null,
-              Flags: "Default",
-            },
-          },
         },
         isSingleTextureMode: 1,
         parts: [],
@@ -42,45 +39,36 @@ const _inkAtlasTemplate = {
           Size: 3,
           Elements: [
             {
-              Type: "inkTextureSlot",
-              Id: "3",
-              Properties: {
-                parts: [],
-                slices: [],
-                texture: {
-                  DepotPath: "",
-                  Flags: "Default",
-                },
+              $type: "inkTextureSlot",
+              parts: [],
+              slices: [],
+              texture: {
+                DepotPath: "",
+                Flags: "Default",
               },
             },
             {
-              Type: "inkTextureSlot",
-              Id: "7",
-              Properties: {
-                parts: [],
-                slices: [],
-                texture: {
-                  DepotPath: "",
-                  Flags: "Default",
-                },
+              $type: "inkTextureSlot",
+              parts: [],
+              slices: [],
+              texture: {
+                DepotPath: "",
+                Flags: "Default",
               },
             },
             {
-              Type: "inkTextureSlot",
-              Id: "11",
-              Properties: {
-                parts: [],
-                slices: [],
-                texture: {
-                  DepotPath: null,
-                  Flags: "Default",
-                },
+              $type: "inkTextureSlot",
+              parts: [],
+              slices: [],
+              texture: {
+                DepotPath: 0,
+                Flags: "Default",
               },
             },
           ],
         },
         texture: {
-          DepotPath: null,
+          DepotPath: 0,
           Flags: "Default",
         },
         textureResolution: "UltraHD_3840_2160",
@@ -91,19 +79,16 @@ const _inkAtlasTemplate = {
 };
 
 const _atlasMappingTemplate = {
-  Type: "inkTextureAtlasMapper",
-  Properties: {
-    clippingRectInPixels: {
-      Type: "Rect",
-      Properties: {
-        bottom: 0,
-        left: 0,
-        right: 0,
-        top: 0,
-      },
-    },
-    clippingRectInUVCoords: {
-      Type: "RectF"
-    }
+  $type: "inkTextureAtlasMapper",
+  clippingRectInPixels: {
+    $type: "Rect",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0,
   },
+  clippingRectInUVCoords: {
+    $type: "RectF",
+  },
+  partName: "",
 };

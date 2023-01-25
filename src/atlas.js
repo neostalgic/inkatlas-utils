@@ -34,14 +34,14 @@ function generateAtlasMappingForLayer(activeDoc, layer) {
   const width = activeDoc.width;
 
   const atlasMappingTemplate = blah();
+  const uv = atlasMappingTemplate.clippingRectInUVCoords;
+  
+  uv.Bottom = layer.bounds.bottom / height;
+  uv.Left = layer.bounds.left / width;
+  uv.Right = layer.bounds.right / width;
+  uv.Top = layer.bounds.top / height;
 
-  atlasMappingTemplate.Properties.clippingRectInUVCoords.Properties = {
-    Bottom: layer.bounds.bottom / height,
-    Left: layer.bounds.left / width,
-    Right: layer.bounds.right / width,
-    Top: layer.bounds.top / height,
-  };
-  atlasMappingTemplate.Properties.partName = slugify(layer.name);
+  atlasMappingTemplate.partName = slugify(layer.name);
 
   return atlasMappingTemplate;
 }
