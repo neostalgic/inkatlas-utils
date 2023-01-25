@@ -9,11 +9,14 @@ const blah = function () {
 };
 
 const _inkAtlasTemplate = {
-  WolvenKitVersion: "8.8.1",
-  WKitJsonVersion: "0.0.3",
-  ExportedDateTime: "2022-01-25T19:03:40.1193136Z",
-  DataType: "CR2W",
-  ArchiveFileName: "",
+  Header: {
+    WolvenKitVersion: "8.8.1",
+    WKitJsonVersion: "0.0.3",
+    GameVersion: 1610,
+    ExportedDateTime: "2022-01-25T19:03:40.1193136Z",
+    DataType: "CR2W",
+    ArchiveFileName: "",
+  },
   Data: {
     Version: 195,
     BuildVersion: 0,
