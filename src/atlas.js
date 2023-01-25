@@ -7,15 +7,12 @@ function generateAtlasJson(activeDoc, depotPath, depotPath1080p) {
   const atlasTemplate = inkAtlasTemplate();
   const atlasMappings = generateAtlasMappings(activeDoc);
 
-  atlasTemplate.Data.RootChunk.Properties.slots.Elements[0].Properties.texture.DepotPath =
-    depotPath;
-  atlasTemplate.Data.RootChunk.Properties.slots.Elements[1].Properties.texture.DepotPath =
+  atlasTemplate.Data.RootChunk.slots.Elements[0].texture.DepotPath = depotPath;
+  atlasTemplate.Data.RootChunk.slots.Elements[1].texture.DepotPath =
     depotPath1080p;
 
-  atlasTemplate.Data.RootChunk.Properties.slots.Elements[0].Properties.parts =
-    atlasMappings;
-  atlasTemplate.Data.RootChunk.Properties.slots.Elements[1].Properties.parts =
-    atlasMappings;
+  atlasTemplate.Data.RootChunk.slots.Elements[0].parts = atlasMappings;
+  atlasTemplate.Data.RootChunk.slots.Elements[1].parts = atlasMappings;
 
   return atlasTemplate;
 }
@@ -34,14 +31,14 @@ function generateAtlasMappingForLayer(activeDoc, layer) {
   const width = activeDoc.width;
 
   const atlasMappingTemplate = blah();
+  const uv = atlasMappingTemplate.clippingRectInUVCoords;
+  
+  uv.Bottom = layer.bounds.bottom / height;
+  uv.Left = layer.bounds.left / width;
+  uv.Right = layer.bounds.right / width;
+  uv.Top = layer.bounds.top / height;
 
-  atlasMappingTemplate.Properties.clippingRectInUVCoords.Properties = {
-    Bottom: layer.bounds.bottom / height,
-    Left: layer.bounds.left / width,
-    Right: layer.bounds.right / width,
-    Top: layer.bounds.top / height,
-  };
-  atlasMappingTemplate.Properties.partName = slugify(layer.name);
+  atlasMappingTemplate.partName = slugify(layer.name);
 
   return atlasMappingTemplate;
 }
