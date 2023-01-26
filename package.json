@@ -5,6 +5,7 @@
   "author": "deadlymustard",
   "license": "Apache-2.0",
   "scripts": {
+    "lint": "prettier --write .",
     "watch": "webpack -w --mode development",
     "build": "webpack --mode development"
   },
