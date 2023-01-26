@@ -1,6 +1,11 @@
 import { app } from "photoshop";
 
-export { slugify, generateVarName, showAlert };
+export { pathify, slugify, generateVarName, showAlert };
+
+function pathify(str) {
+  str = str.replace(/\\{1}\\+/g, "\\"); // collapse backslashes
+  return str;
+}
 
 function slugify(str) {
   str = str.replace(/^\s+|\s+$/g, ""); // trim

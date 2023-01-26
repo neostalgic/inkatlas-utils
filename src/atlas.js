@@ -1,5 +1,5 @@
-import { inkAtlasTemplate, blah } from "./templates";
-import { slugify } from "./utils";
+import { blah, inkAtlasTemplate } from "./templates";
+import { pathify, slugify } from "./utils";
 
 export { generateAtlasJson };
 
@@ -7,9 +7,10 @@ function generateAtlasJson(activeDoc, depotPath, depotPath1080p) {
   const atlasTemplate = inkAtlasTemplate();
   const atlasMappings = generateAtlasMappings(activeDoc);
 
-  atlasTemplate.Data.RootChunk.slots.Elements[0].texture.DepotPath = depotPath;
+  atlasTemplate.Data.RootChunk.slots.Elements[0].texture.DepotPath =
+    pathify(depotPath);
   atlasTemplate.Data.RootChunk.slots.Elements[1].texture.DepotPath =
-    depotPath1080p;
+    pathify(depotPath1080p);
 
   atlasTemplate.Data.RootChunk.slots.Elements[0].parts = atlasMappings;
   atlasTemplate.Data.RootChunk.slots.Elements[1].parts = atlasMappings;
