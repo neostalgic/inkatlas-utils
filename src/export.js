@@ -1,7 +1,7 @@
-import { app, core } from "photoshop";
-import { storage } from "uxp";
+import { app, core } from 'photoshop'
+import { storage } from 'uxp'
 
-import { showAlert } from "./utils";
+import { showAlert } from './utils'
 
 export { executeExport };
 
@@ -112,14 +112,15 @@ async function executeExport(file, scaleFactor) {
   ];
 
   await core.executeAsModal(
-    async () => {
+    async (executionContext) => {
       try {
-        await app.batchPlay(batchPlayAction, {
-          historyStateInfo: {
-            name: "Export TGA",
-            target: [{ _ref: "document", _id: app.activeDocument.id }],
-          },
+        const hostControl = executionContext.hostControl;
+        const suspensionID = await hostControl.suspendHistory({
+          documentID: app.activeDocument.id,
+          name: "Export TGA",
         });
+        await app.batchPlay(batchPlayAction);
+        await hostControl.resumeHistory(suspensionID, false);
       } catch (e) {
         console.log(e);
         showAlert(`Error occured while exporting: ${e.message}`);
