@@ -1,7 +1,7 @@
-import { storage } from "uxp";
-import { app, core } from "photoshop";
+import { app, core } from 'photoshop'
+import { storage } from 'uxp'
 
-import { showAlert } from "./utils";
+import { showAlert } from './utils'
 
 export { executeExport };
 
@@ -47,20 +47,6 @@ async function executeExport(file, scaleFactor) {
           width: {
             _unit: "percentUnit",
             _value: scaleFactor
-          }
-        },
-        {
-          _obj: "flip",
-          _target: [
-            {
-              _enum: "ordinal",
-              _ref: "document",
-              _value: "first"
-            }
-          ],
-          axis: {
-            _enum: "orientation",
-            _value: "vertical"
           }
         },
         {
