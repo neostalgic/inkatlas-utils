@@ -45,7 +45,6 @@ async function writeAtlasFile(fileName, depotPath, depotPath1080p) {
 
 // Stringify atlas file and write
 async function writeAtlasJsonToDisk(fileName, atlasJson) {
-  const fs = storage.localFileSystem;
   const atlasFileName = `${fileName}.inkatlas.json`;
   const jsonPayload = JSON.stringify(atlasJson);
   await writeFile(atlasFileName, "json", jsonPayload);
