@@ -35,7 +35,7 @@ function generateVarName(str) {
   str = str
     .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
     .replace(/-/g, "_") // replace dashes with underscores
-    .replace(/\s+/g, "") // collapse whitespace
+    .replace(/\s+/g, ""); // collapse whitespace
 
   return str;
 }
@@ -44,4 +44,3 @@ function generateVarName(str) {
 async function showAlert(message) {
   await app.showAlert(message);
 }
-

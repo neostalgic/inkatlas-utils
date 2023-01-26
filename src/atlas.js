@@ -20,10 +20,8 @@ function generateAtlasJson(activeDoc, depotPath, depotPath1080p) {
 function generateAtlasMappings(activeDoc) {
   const allLayers = activeDoc.layers;
   return allLayers
-  .filter(layer => layer.name !== 'Background')
-  .map((layer) =>
-    generateAtlasMappingForLayer(activeDoc, layer)
-  );
+    .filter((layer) => layer.name !== "Background")
+    .map((layer) => generateAtlasMappingForLayer(activeDoc, layer));
 }
 
 function generateAtlasMappingForLayer(activeDoc, layer) {
@@ -32,7 +30,7 @@ function generateAtlasMappingForLayer(activeDoc, layer) {
 
   const atlasMappingTemplate = blah();
   const uv = atlasMappingTemplate.clippingRectInUVCoords;
-  
+
   uv.Bottom = layer.bounds.bottom / height;
   uv.Left = layer.bounds.left / width;
   uv.Right = layer.bounds.right / width;
