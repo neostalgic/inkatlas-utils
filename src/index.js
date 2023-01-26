@@ -1,10 +1,10 @@
+import { app } from "photoshop";
 import { storage } from "uxp";
-import { app, core } from "photoshop";
 
-import { fitLayersAndMove } from "./fit";
 import { generateAtlasJson } from "./atlas";
-import { generateRedscriptFile } from "./redscript";
 import { executeExport } from "./export";
+import { fitLayersAndMove } from "./fit";
+import { generateRedscriptFile } from "./redscript";
 import { showAlert } from "./utils";
 
 // Handle fitting layers together
