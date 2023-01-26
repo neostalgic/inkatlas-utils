@@ -1,7 +1,7 @@
-import { app, core } from 'photoshop'
-import { storage } from 'uxp'
+import { app, core } from "photoshop";
+import { storage } from "uxp";
 
-import { showAlert } from './utils'
+import { showAlert } from "./utils";
 
 export { executeExport };
 
