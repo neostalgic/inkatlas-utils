@@ -1,12 +1,11 @@
+import { app } from "photoshop";
 import { storage } from "uxp";
-import { app, core } from "photoshop";
 
-import { fitLayersAndMove } from "./fit";
 import { generateAtlasJson } from "./atlas";
-import { generateRedscriptFile } from "./redscript";
 import { executeExport } from "./export";
+import { fitLayersAndMove } from "./fit";
+import { generateRedscriptFile } from "./redscript";
 import { showAlert } from "./utils";
-
 
 // Handle fitting layers together
 async function fitLayers(spacing) {
@@ -46,7 +45,6 @@ async function writeAtlasFile(fileName, depotPath, depotPath1080p) {
 
 // Stringify atlas file and write
 async function writeAtlasJsonToDisk(fileName, atlasJson) {
-  const fs = storage.localFileSystem;
   const atlasFileName = `${fileName}.inkatlas.json`;
   const jsonPayload = JSON.stringify(atlasJson);
   await writeFile(atlasFileName, "json", jsonPayload);
@@ -64,15 +62,26 @@ async function writeRedscriptSampleFile(depotPath, scalingFactor) {
     const activeDoc = app.activeDocument;
     const existingRedscriptFile = await getExistingRedscriptFile();
     const existingRedscriptFileContents = await existingRedscriptFile.read();
-    const generatedRedscript = generateRedscriptFile(existingRedscriptFileContents, activeDoc, depotPath, scalingFactor);
+    const generatedRedscript = generateRedscriptFile(
+      existingRedscriptFileContents,
+      activeDoc,
+      depotPath,
+      scalingFactor
+    );
     if (generatedRedscript) {
       const pluginDataFolder = await fs.getPluginFolder();
       const folder = await fs.getFolder();
-      const existingModFolder = await pluginDataFolder.getEntry("resources/TextureSampleMod");
+      const existingModFolder = await pluginDataFolder.getEntry(
+        "resources/TextureSampleMod"
+      );
       await copyFolderRecursively(existingModFolder, folder);
-      
-      const coreModDirectory = await folder.getEntry("TextureSampleMod/SampleMod");
-      const redscriptFile = await coreModDirectory.createFile("Textures.reds", { overwrite: true });
+
+      const coreModDirectory = await folder.getEntry(
+        "TextureSampleMod/SampleMod"
+      );
+      const redscriptFile = await coreModDirectory.createFile("Textures.reds", {
+        overwrite: true,
+      });
       await redscriptFile.write(generatedRedscript);
     } else {
       showAlert("Could not generate Redscript mod files.");
@@ -91,7 +100,7 @@ async function copyFolderRecursively(entry, destination) {
       childFolder = await destination.createFolder(entry.name);
     }
     const entries = await entry.getEntries();
-    for(const childEntry of entries) {
+    for (const childEntry of entries) {
       await copyFolderRecursively(childEntry, childFolder);
     }
   } else {
@@ -102,7 +111,9 @@ async function copyFolderRecursively(entry, destination) {
 async function getExistingRedscriptFile() {
   const fs = storage.localFileSystem;
   const pluginDataFolder = await fs.getPluginFolder();
-  const templatesFolder = await pluginDataFolder.getEntry("resources/templates");
+  const templatesFolder = await pluginDataFolder.getEntry(
+    "resources/templates"
+  );
   return await templatesFolder.getEntry("Textures.reds");
 }
 
@@ -123,43 +134,47 @@ function escapeSlashes(path) {
   return path.replace(/(?<!\\)\\(?!\\)/g, "\\\\");
 }
 
-document.querySelector("#btnArrange").addEventListener("click", evt => {
+document.querySelector("#btnArrange").addEventListener("click", (evt) => {
   evt.stopPropagation();
-  const textureSpacing = parseInt(document.querySelector("#textureSpacing").value);
+  const textureSpacing = parseInt(
+    document.querySelector("#textureSpacing").value
+  );
   fitLayers(textureSpacing);
   evt.stopImmediatePropagation();
-})
+});
 
-document.querySelector("#btnGenerate").addEventListener("click", evt => {
+document.querySelector("#btnGenerate").addEventListener("click", (evt) => {
   evt.stopPropagation();
   const atlasFileName = document.querySelector("#atlasFileName").value;
-  const depotPath = document.querySelector("#texturePath").value
-  const depotPath1080p = document.querySelector("#texturePath1080p").value
+  const depotPath = document.querySelector("#texturePath").value;
+  const depotPath1080p = document.querySelector("#texturePath1080p").value;
 
   writeAtlasFile(atlasFileName, depotPath, depotPath1080p);
   evt.stopImmediatePropagation();
-})
+});
 
-document.querySelector("#btnRedscript").addEventListener("click", evt => {
+document.querySelector("#btnRedscript").addEventListener("click", (evt) => {
   evt.stopPropagation();
-  const depotPath = escapeSlashes(document.querySelector("#redscriptTexturePath").value);
-  const scalingFactor = document.querySelector("#redscriptIconScale").value
+  const depotPath = escapeSlashes(
+    document.querySelector("#redscriptTexturePath").value
+  );
+  const scalingFactor = document.querySelector("#redscriptIconScale").value;
   console.log(depotPath);
   writeRedscriptSampleFile(depotPath, scalingFactor);
   evt.stopImmediatePropagation();
-})
+});
 
-document.querySelector("#btnExport").addEventListener("click", evt => {
-  const scaleFactor = parseFloat(document.querySelector("#scaleFactor").value)
+document.querySelector("#btnExport").addEventListener("click", (evt) => {
+  const scaleFactor = parseFloat(document.querySelector("#scaleFactor").value);
   writeTgaFile(scaleFactor);
   evt.stopImmediatePropagation();
-})
+});
 
-document.querySelectorAll("sp-textfield").forEach(item => {
-  item.addEventListener('paste', evt => {
-    let paste = (evt.clipboardData || window.clipboardData).getData('text');
+document.querySelectorAll("sp-textfield").forEach((item) => {
+  item.addEventListener("paste", (evt) => {
+    let paste = (evt.clipboardData || window.clipboardData).getData("text");
     let escaped = escapeSlashes(paste);
     item.value = escaped;
     evt.stopImmediatePropagation();
-  })
-})
+  });
+});

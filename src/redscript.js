@@ -1,44 +1,55 @@
-import { slugify, generateVarName } from './utils';
+import { slugify, generateVarName } from "./utils";
 
 export { generateRedscriptFile };
 
-function generateRedscriptFile(existingRedscriptFile, activeDoc, depotPath, scalingFactor) {
-    const allLayers = activeDoc.layers.filter(layer => layer.name !== "Background");
-    let maxTexturesInColumn = 7;
-    let columnNumber = maxTexturesInColumn;
-    let rowNumber = 0;
-    const redscriptImages = allLayers.map(layer => {
-        let code = "";
-        if (columnNumber == maxTexturesInColumn) {
-            rowNumber++;
-            code += generateNewRow(rowNumber);
-            columnNumber = 0;
-        }
-        code += generateRedscriptForlayer(layer, depotPath, scalingFactor, rowNumber)
-        
-        columnNumber++;
-        return code;
-    }
-        
-    ).join("\n");
-    return existingRedscriptFile.replace("//ReplaceMe//", redscriptImages);
+function generateRedscriptFile(
+  existingRedscriptFile,
+  activeDoc,
+  depotPath,
+  scalingFactor
+) {
+  const allLayers = activeDoc.layers.filter(
+    (layer) => layer.name !== "Background"
+  );
+  let maxTexturesInColumn = 7;
+  let columnNumber = maxTexturesInColumn;
+  let rowNumber = 0;
+  const redscriptImages = allLayers
+    .map((layer) => {
+      let code = "";
+      if (columnNumber == maxTexturesInColumn) {
+        rowNumber++;
+        code += generateNewRow(rowNumber);
+        columnNumber = 0;
+      }
+      code += generateRedscriptForlayer(
+        layer,
+        depotPath,
+        scalingFactor,
+        rowNumber
+      );
+
+      columnNumber++;
+      return code;
+    })
+    .join("\n");
+  return existingRedscriptFile.replace("//ReplaceMe//", redscriptImages);
 }
 
 function generateNewRow(columnNumber) {
-    return `
+  return `
         let textures_${columnNumber}: ref<inkHorizontalPanel> = new inkHorizontalPanel();
         textures_${columnNumber}.Reparent(rows);
     `;
 }
 
 function generateRedscriptForlayer(layer, depotPath, scalingFactor, rowNumber) {
-    const varName = `image${generateVarName(layer.name)}`;
-    const scaledWidth = layer.bounds.width * (scalingFactor / 100);
-    const scaledHeight = layer.bounds.height * (scalingFactor / 100);
-    const cName = `n"${slugify(layer.name)}"`;
+  const varName = `image${generateVarName(layer.name)}`;
+  const scaledWidth = layer.bounds.width * (scalingFactor / 100);
+  const scaledHeight = layer.bounds.height * (scalingFactor / 100);
+  const cName = `n"${slugify(layer.name)}"`;
 
-    const redscriptForLayer = 
-    `
+  const redscriptForLayer = `
         let ${varName}: ref<inkImage> = new inkImage();
         ${varName}.SetAtlasResource(r"${depotPath}");
         ${varName}.SetTexturePart(${cName});
@@ -53,6 +64,5 @@ function generateRedscriptForlayer(layer, depotPath, scalingFactor, rowNumber) {
         ${varName}.Reparent(textures_${rowNumber});
     `;
 
-    return redscriptForLayer;
+  return redscriptForLayer;
 }
-

@@ -1,6 +1,11 @@
 import { app } from "photoshop";
 
-export { slugify, generateVarName, showAlert };
+export { pathify, slugify, generateVarName, showAlert };
+
+function pathify(str) {
+  str = str.replace(/\\{1}\\+/g, "\\"); // collapse backslashes
+  return str;
+}
 
 function slugify(str) {
   str = str.replace(/^\s+|\s+$/g, ""); // trim
@@ -16,7 +21,7 @@ function slugify(str) {
   str = str
     .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
     .replace(/\s+/g, "-") // collapse whitespace and replace by -
-    .replace(/-+/g, "-"); // collapse dashes
+    .replace(/-+/g, "_"); // collapse dashes and replace by _
 
   return str;
 }
@@ -35,7 +40,7 @@ function generateVarName(str) {
   str = str
     .replace(/[^a-z0-9 -]/g, "") // remove invalid chars
     .replace(/-/g, "_") // replace dashes with underscores
-    .replace(/\s+/g, "") // collapse whitespace
+    .replace(/\s+/g, ""); // collapse whitespace
 
   return str;
 }
@@ -44,4 +49,3 @@ function generateVarName(str) {
 async function showAlert(message) {
   await app.showAlert(message);
 }
-
