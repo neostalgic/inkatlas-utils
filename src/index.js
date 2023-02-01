@@ -12,7 +12,7 @@ async function fitLayers(spacing) {
   fitLayersAndMove(spacing);
 }
 
-async function writeTgaFile(scaleFactor) {
+async function writeTgaFile(scaleFactor, flipImage) {
   const fs = storage.localFileSystem;
   const file = await fs.getFileForSaving("output", {
     types: ["tga"],
@@ -21,7 +21,7 @@ async function writeTgaFile(scaleFactor) {
     // file picker was cancelled
     return;
   }
-  executeExport(file, scaleFactor);
+  executeExport(file, scaleFactor, flipImage);
 }
 
 // Generate the atlas file and write
@@ -166,7 +166,8 @@ document.querySelector("#btnRedscript").addEventListener("click", (evt) => {
 
 document.querySelector("#btnExport").addEventListener("click", (evt) => {
   const scaleFactor = parseFloat(document.querySelector("#scaleFactor").value);
-  writeTgaFile(scaleFactor);
+  const flipImage = document.querySelector("#flipImage").checked;
+  writeTgaFile(scaleFactor, flipImage);
   evt.stopImmediatePropagation();
 });
 
