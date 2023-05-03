@@ -12,7 +12,7 @@ jobs:
       - name: setup Node.js
         uses: dcodeIO/setup-node-nvm@master
         with:
-          node-version: ${{ steps.nvm.outputs.NVMRC }}"
+          node-version: ${{ steps.nvm.outputs.NVMRC }}
       - name: install Node.js dependencies
         run: npm ci
       - name: lint code
