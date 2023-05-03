@@ -1,7 +1,7 @@
 {
   "id": "inkatlas-utils",
   "name": "InkAtlas Utils",
-  "version": "1.0.0",
+  "version": "0.7.0",
   "main": "index.html",
   "host": [
     {
@@ -9,7 +9,11 @@
       "minVersion": "23.0.0"
     }
   ],
-  "manifestVersion": 4,
+  "manifestVersion": 5,
+  "requiredPermissions": {
+    "launchProcess": "request",
+    "localFileSystem": "request"
+  },
   "entrypoints": [
     {
       "type": "panel",
