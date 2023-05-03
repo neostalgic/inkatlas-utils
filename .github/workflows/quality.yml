@@ -1,4 +1,7 @@
-on: push
+on: [push, pull_request_target]
+
+permissions:
+  checks: write
 
 jobs:
   lint:
