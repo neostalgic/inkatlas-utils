@@ -1,0 +1,16 @@
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: setup Node.js
+        uses: dcodeIO/setup-node-nvm@master
+      - name: install Node.js dependencies
+        run: npm ci
+      - name: lint code
+        uses: wearerequired/lint-action@v1
+        with:
+          prettier: true
