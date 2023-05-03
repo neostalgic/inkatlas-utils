@@ -11,6 +11,6 @@ jobs:
       - name: install Node.js dependencies
         run: npm ci
       - name: lint code
-        uses: wearerequired/lint-action@v1
+        uses: wearerequired/lint-action@v2
         with:
           prettier: true
