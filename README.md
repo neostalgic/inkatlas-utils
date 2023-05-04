@@ -6,13 +6,13 @@ This is a Photoshop plugin that assists in the creation of texture maps in Cyber
 
 ## Prerequisites
 
-- Adobe Photoshop 2022
-- Currently requires the latest nightly build of WolvenKit: https://github.com/WolvenKit/WolvenKit-nightly-releases/releases
+- Adobe Photoshop 2022 or more recent
+- Requires [WolvenKit](https://github.com/WolvenKit/WolvenKit/releases/latest)
 - For testing purposes, the latest copy of Redscript must be installed (Optional)
 
 ## Installation
 
-1. Download the latest `inkatlas-utils_PS.ccx` at https://github.com/deadlymustard/inkatlas-utils/releases.
+1. Download the latest [inkatlas-utils_PS.ccx](https://github.com/deadlymustard/inkatlas-utils/releases).
 2. Double click the downloaded `inkatlas-utils_PS.ccx` to add the Plugin to Photoshop.
 
 ## Usage
@@ -27,7 +27,7 @@ When ready, you can then go to Plugins -> InkAtlas Utils and open the panel. See
 
 ### Fit Layers
 
-Will automatically arrange each layer in your Photoshop document (`.psd`) into the bounds of the current document. As document size increases, there may be no valid solution for packing all layers into your document - you must increase the canvas/image size until all layers fit or potentially get cut off textures when generating the `.inkatlas` file. Credit to: https://github.com/jakesgordon/bin-packing for the bin-packing library.
+Will automatically arrange each layer in your Photoshop document (`.psd`) into the bounds of the current document. As document size increases, there may be no valid solution for packing all layers into your document - you must increase the canvas/image size until all layers fit or potentially get cut off textures when generating the `.inkatlas` file. Credit to: Jake Gordon for the [bin-packing library](https://github.com/jakesgordon/bin-packing).
 
 - Texture Spacing
   - Determines how far apart each layer is spaced out. This spacing is factored into the packing algorithm described above.

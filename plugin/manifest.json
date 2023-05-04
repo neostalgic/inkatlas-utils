@@ -11,11 +11,9 @@
   ],
   "manifestVersion": 5,
   "requiredPermissions": {
-    "launchProcess": {    
-        "schemes": 
-            [ "https", "slack", "adbxd" ],   
-        "extensions": 
-            [ ".pdf", ".xd", ".psd" ]       
+    "launchProcess": {
+      "schemes": ["https", "slack", "adbxd"],
+      "extensions": [".pdf", ".xd", ".psd"]
     },
     "localFileSystem": "fullAccess"
   },
