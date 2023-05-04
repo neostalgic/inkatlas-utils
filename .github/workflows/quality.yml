@@ -1,0 +1,24 @@
+on: [push, pull_request_target]
+
+permissions:
+  checks: write # see https://github.com/wearerequired/lint-action#usage
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: read .nvmrc
+        id: nvm
+        run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+      - name: setup Node.js
+        uses: dcodeIO/setup-node-nvm@master
+        with:
+          node-version: ${{ steps.nvm.outputs.NVMRC }}
+      - name: install Node.js dependencies
+        run: npm ci
+      - name: lint code
+        uses: wearerequired/lint-action@v2
+        with:
+          prettier: true
