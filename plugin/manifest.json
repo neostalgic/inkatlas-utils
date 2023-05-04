@@ -1,18 +1,23 @@
 {
   "id": "inkatlas-utils",
   "name": "InkAtlas Utils",
-  "version": "0.7.0",
+  "version": "1.1.0",
   "main": "index.html",
   "host": [
     {
       "app": "PS",
-      "minVersion": "23.0.0"
+      "minVersion": "24.0.0"
     }
   ],
   "manifestVersion": 5,
   "requiredPermissions": {
-    "launchProcess": "request",
-    "localFileSystem": "request"
+    "launchProcess": {    
+        "schemes": 
+            [ "https", "slack", "adbxd" ],   
+        "extensions": 
+            [ ".pdf", ".xd", ".psd" ]       
+    },
+    "localFileSystem": "fullAccess"
   },
   "entrypoints": [
     {
