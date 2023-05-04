@@ -5,7 +5,7 @@ import { showAlert } from "./utils";
 
 export { executeExport };
 
-async function executeExport(file, scaleFactor) {
+async function executeExport(file, scaleFactor, flipImage = false) {
   const fs = storage.localFileSystem;
   const saveFile = await fs.createSessionToken(file);
   const activeDoc = app.activeDocument;
@@ -110,6 +110,24 @@ async function executeExport(file, scaleFactor) {
       ],
     },
   ];
+  if (flipImage) {
+    const flipAction = {
+      _obj: "flip",
+      _target: [
+        {
+          _enum: "ordinal",
+          _ref: "document",
+          _value: "first",
+        },
+      ],
+      axis: {
+        _enum: "orientation",
+        _value: "vertical",
+      },
+    };
+    let idx = batchPlayAction.findIndex(({ _obj }) => _obj == "imageSize");
+    batchPlayAction.splice(idx + 1, 0, flipAction);
+  }
 
   await core.executeAsModal(
     async (executionContext) => {
